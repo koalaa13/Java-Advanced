@@ -1,0 +1,6 @@
+#!/bin/bash
+package="src/ru/itmo/rain/maksimov/implementor/"
+data="src/info/kgeorgiy/java/advanced/implementor/"
+
+cd ~/Desktop/java_course/homeworks
+javadoc -d javadoc -link https://docs.oracle.com/en/java/javase/13/docs/api/ -private -author -version $package"Implementor.java" $data"Impler.java" $data"ImplerException.java" $data"JarImpler.java" $package"/../Helper.java"
