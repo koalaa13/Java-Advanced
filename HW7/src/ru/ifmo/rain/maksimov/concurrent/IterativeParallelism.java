@@ -17,7 +17,7 @@ public class IterativeParallelism implements AdvancedIP {
     /**
      * Default constructor
      */
-    IterativeParallelism() {
+    public IterativeParallelism() {
     }
 
     private static <T, R> Thread getThread(int i,
