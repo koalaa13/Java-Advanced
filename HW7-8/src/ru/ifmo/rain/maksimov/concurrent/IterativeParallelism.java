@@ -23,7 +23,10 @@ public class IterativeParallelism implements AdvancedIP {
      * Default constructor
      */
     public IterativeParallelism() {
+<<<<<<< HEAD:HW7-8/src/ru/ifmo/rain/maksimov/concurrent/IterativeParallelism.java
         mapper = null;
+=======
+>>>>>>> 8ad6ab4a8e24dc1a9daaf7e6a832fe45727985e8:HW7/src/ru/ifmo/rain/maksimov/concurrent/IterativeParallelism.java
     }
 
     /**
