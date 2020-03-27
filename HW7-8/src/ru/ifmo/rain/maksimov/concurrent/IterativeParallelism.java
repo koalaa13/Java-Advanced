@@ -1,6 +1,7 @@
 package ru.ifmo.rain.maksimov.concurrent;
 
 import info.kgeorgiy.java.advanced.concurrent.AdvancedIP;
+import info.kgeorgiy.java.advanced.mapper.ParallelMapper;
 
 import java.util.*;
 import java.util.function.Function;
@@ -8,62 +9,58 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static ru.ifmo.rain.maksimov.concurrent.Utils.*;
+
 /**
  * Implementation for {@link AdvancedIP} interface
  *
  * @author koalaa13 (github.com/koalaa13)
  */
 public class IterativeParallelism implements AdvancedIP {
+    final private ParallelMapper mapper;
+
     /**
      * Default constructor
      */
-    IterativeParallelism() {
+    public IterativeParallelism() {
+        mapper = null;
     }
 
-    private static <T, R> Thread getThread(int i,
-                                           List<R> res,
-                                           Stream<T> data,
-                                           Function<? super Stream<T>, R> task) {
-        return new Thread(() -> res.set(i, task.apply(data)));
+    /**
+     * Constructor with given {@link ParallelMapper}
+     *
+     * @param mapper mapper to use to do jobs.
+     */
+    public IterativeParallelism(ParallelMapper mapper) {
+        this.mapper = mapper;
     }
 
-    private static <T, R> R doJob(int threads,
-                                  List<T> values,
-                                  Function<? super Stream<T>, R> task,
-                                  Function<? super Stream<R>, R> collector) throws InterruptedException {
-        if (threads <= 0) {
-            throw new IllegalArgumentException("thread number should be >= 0");
-        }
+    private <T, R> R doJob(int threads,
+                           List<T> values,
+                           Function<? super Stream<T>, R> task,
+                           Function<? super Stream<R>, R> collector) throws InterruptedException {
+        checkThreads(threads);
         threads = Math.min(values.size(), threads);
-        final List<Thread> jobs = new ArrayList<>(Collections.nCopies(threads, null));
-        final List<R> result = new ArrayList<>(Collections.nCopies(threads, null));
+        List<R> result;
+        final List<Stream<T>> subTasks = new ArrayList<>();
         final int rest = values.size() % threads;
         int blockSize = values.size() / threads + 1;
         for (int i = 0, pos = 0; i < threads; ++i, pos += blockSize) {
             if (rest == i) {
                 blockSize--;
             }
-            jobs.set(i, getThread(i, result, values.subList(pos, pos + blockSize).stream(), task));
-            jobs.get(i).start();
+            subTasks.add(values.subList(pos, pos + blockSize).stream());
         }
-        InterruptedException exception = null;
-        for (Thread thread : jobs) {
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                if (exception == null) {
-                    exception = new InterruptedException("Not all thread joined");
-                }
-                exception.addSuppressed(e);
-                for (Thread toStop : jobs) {
-                    if (toStop.isAlive()) {
-                        toStop.interrupt();
-                    }
-                }
+
+        if (mapper == null) {
+            final List<Thread> workers = new ArrayList<>();
+            result = new ArrayList<>(Collections.nCopies(threads, null));
+            for (int i = 0; i < threads; i++) {
+                addAndStart(workers, getThread(i, result, subTasks.get(i), task));
             }
-        }
-        if (exception != null) {
-            throw exception;
+            joinThreads(workers);
+        } else {
+            result = mapper.map(task, subTasks);
         }
         return collector.apply(result.stream());
     }
