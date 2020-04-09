@@ -1,3 +1,0 @@
-#!/bin/bash
-cd out/production/homeworks
-jar -cfm ../../../src/Implementor.jar ../../../src/scripts/Manifest.txt: ru/itmo/rain/maksimov/implementor/Implementor.class: ru/itmo/rain/maksimov/Helper.class

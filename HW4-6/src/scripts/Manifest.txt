@@ -1,2 +1,0 @@
-Main-Class: Implementor
-Implementation-Vendor: Maksimov Nikita
