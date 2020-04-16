@@ -1,0 +1,2 @@
+Main-Class: ru.ifmo.rain.maksimov.implementor.JarImplementor
+Class-Path: info.kgeorgiy.java.advanced.implementor.jar
