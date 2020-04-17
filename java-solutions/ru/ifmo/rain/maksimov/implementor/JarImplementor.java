@@ -5,6 +5,8 @@ import info.kgeorgiy.java.advanced.implementor.JarImpler;
 
 import java.nio.file.InvalidPathException;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.Objects;
 
 import static ru.ifmo.rain.maksimov.utils.Helper.log;
 
@@ -32,11 +34,9 @@ public class JarImplementor extends Implementor {
             log("Use -jar <type_token> <path>");
             return;
         }
-        for (String arg : args) {
-            if (arg == null) {
-                log("Argument can not be null");
-                return;
-            }
+        if (Arrays.stream(args).anyMatch(Objects::isNull)) {
+            log("Arguments can not be null");
+            return;
         }
         JarImpler implementor = new Implementor();
         try {

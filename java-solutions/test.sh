@@ -8,6 +8,6 @@ cp -r /home/koalaa13/Desktop/github_loadings/java-advanced-2020/artifacts/. .
 cp -r /home/koalaa13/Desktop/github_loadings/java-advanced-2020/lib/. .
 cp -r /home/koalaa13/Desktop/github_loadings/java-advanced-2020-solutions/java-solutions/out/production/java-solutions/ru .
 rm -f module-info.class
-java -cp . -p . -m info.kgeorgiy.java.advanced.implementor jar-advanced ru.ifmo.rain.maksimov.implementor.JarImplementor $1
+java -cp . -p . -m info.kgeorgiy.java.advanced.crawler hard ru.ifmo.rain.maksimov.crawler.WebCrawler $1
 cd ..
 rm -rf tmp

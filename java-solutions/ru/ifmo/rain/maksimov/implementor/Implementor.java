@@ -581,12 +581,7 @@ public class Implementor implements JarImpler {
     }
 
     /**
-     * This method is used to choose mode and run an implementor.
-     * Runs {@link Implementor} in two ways:
-     * <ul>
-     *  <li> 2 arguments: className rootPath - runs {@link #implement(Class, Path)} with given arguments</li>
-     *  <li> 3 arguments: -jar className jarPath - runs {@link #implementJar(Class, Path)} with two second arguments</li>
-     * </ul>
+     * Usage: className rootPath - runs {@link #implement(Class, Path)} with given arguments
      * If arguments are incorrect or an error occurred during implementation log a message with {@link ru.ifmo.rain.maksimov.utils.Helper#log(String, Exception)}
      *
      * @param args arguments to run an application with
@@ -596,11 +591,9 @@ public class Implementor implements JarImpler {
             log("Use <type_token> <path>");
             return;
         }
-        for (String arg : args) {
-            if (arg == null) {
-                log("Argument can not be null");
-                return;
-            }
+        if (Arrays.stream(args).anyMatch(Objects::isNull)) {
+            log("Arguments can not be null");
+            return;
         }
         JarImpler implementor = new Implementor();
         try {
