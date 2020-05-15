@@ -4,6 +4,8 @@ import ru.ifmo.rain.maksimov.concurrent.IterativeParallelism;
 import ru.ifmo.rain.maksimov.concurrent.ParallelMapperImpl;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -16,18 +18,18 @@ public class ConcurrentUtils {
      * Invoke {@link Function#apply} using {@link Stream data} as argument.
      * Then set at index i in {@link List res} result of applying function.
      *
-     * @param i index where to set result of applying function
-     * @param res {@link List list} where to set
+     * @param i    index where to set result of applying function
+     * @param res  {@link List list} where to set
      * @param data argument for function
      * @param task function to apply
-     * @param <T> typename for data
-     * @param <R> typename for result
+     * @param <T>  typename for data
+     * @param <R>  typename for result
      * @return Watch description
      */
     public static <T, R> Thread getThread(int i,
-                                   List<R> res,
-                                   Stream<T> data,
-                                   Function<? super Stream<T>, R> task) {
+                                          List<R> res,
+                                          Stream<T> data,
+                                          Function<? super Stream<T>, R> task) {
         return new Thread(() -> res.set(i, task.apply(data)));
     }
 
@@ -85,11 +87,23 @@ public class ConcurrentUtils {
         }
     }
 
+    public static void closeExecutorService(ExecutorService service) {
+        closeExecutorService(service, 5, TimeUnit.SECONDS);
+    }
+
+    public static void closeExecutorService(ExecutorService service, int timeout, TimeUnit timeUnit) {
+        service.shutdownNow();
+        try {
+            service.awaitTermination(timeout, timeUnit);
+        } catch (InterruptedException ignored) {
+        }
+    }
+
     /**
      * Add {@link Thread thread} to {@link List list} of workers and it
      *
      * @param workers {@link List list} where to add thread
-     * @param thread {@link Thread thread} to add and start
+     * @param thread  {@link Thread thread} to add and start
      */
     public static void addAndStart(List<Thread> workers, final Thread thread) {
         workers.add(thread);

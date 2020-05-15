@@ -3,11 +3,12 @@ package ru.ifmo.rain.maksimov.implementor;
 import info.kgeorgiy.java.advanced.implementor.ImplerException;
 import info.kgeorgiy.java.advanced.implementor.JarImpler;
 
-import static ru.ifmo.rain.maksimov.utils.Helper.*;
-
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
+import java.io.Writer;
 import java.lang.reflect.*;
 import java.net.URISyntaxException;
 import java.nio.file.*;
@@ -21,6 +22,8 @@ import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
+
+import static ru.ifmo.rain.maksimov.utils.Helper.log;
 
 /**
  * Implementation class for {@link JarImpler} interface

@@ -1,10 +1,11 @@
 package ru.ifmo.rain.maksimov.walk;
 
-import static ru.ifmo.rain.maksimov.utils.Helper.*;
-
 import java.io.*;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
+
+import static ru.ifmo.rain.maksimov.utils.Helper.getOutputFormat;
+import static ru.ifmo.rain.maksimov.utils.Helper.log;
 
 public class RecursiveWalk {
     private final static int BUFFER_SIZE = 8192;

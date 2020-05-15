@@ -7,6 +7,7 @@ import java.net.MalformedURLException;
 import java.util.*;
 import java.util.concurrent.*;
 
+import static ru.ifmo.rain.maksimov.utils.ConcurrentUtils.closeExecutorService;
 import static ru.ifmo.rain.maksimov.utils.Helper.log;
 
 /**
@@ -130,8 +131,8 @@ public class WebCrawler implements Crawler {
 
     @Override
     public void close() {
-        downloadersPool.shutdownNow();
-        extractorsPool.shutdownNow();
+        closeExecutorService(downloadersPool);
+        closeExecutorService(extractorsPool);
     }
 
     /**
